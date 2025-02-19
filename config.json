@@ -1,7 +1,7 @@
 {
-  "repoAPath": "",
-  "repoBPath": "",
-  "commitA": "",
-  "commitB": "",
+  "repoFromPath": "",
+  "repoToPath": "",
+  "commitFrom": "",
+  "commitTo": "",
   "needValdateGit": false
 }

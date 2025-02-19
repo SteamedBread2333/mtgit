@@ -2,13 +2,12 @@
  * @file index.js
  * @description Synchronizes changes between two Git repositories.
  * @author pipi
- * @license MIT
  */
 const { execSync } = require('child_process'); // For executing Git commands
 const fs = require('fs'); // File system operations
 const path = require('path'); // Path manipulation
 const readline = require('readline'); // User input
-const loadConfig = require('./config'); // Load configuration from a JSON file
+const loadConfig = require('./applyConfig'); // Load configuration from a JSON file
 const os = require('os'); // Operating system information
 
 // Resolve the home directory in the path
@@ -166,6 +165,6 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
 
 // Load configuration from a JSON file
 const config = loadConfig('config.json'); // Example path to config.json
-const { repoAPath, repoBPath, commitA, commitB, needValdateGit } = config;
+const { repoFromPath, repoToPath, commitFrom, commitTo, needValdateGit } = config;
 // Start the synchronization process with the loaded parameters
-syncRepositories(resolveHomePath(repoAPath), resolveHomePath(repoBPath), commitA, commitB, needValdateGit);
+syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit);

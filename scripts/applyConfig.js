@@ -1,3 +1,8 @@
+/**
+ * @file applyConfig.js
+ * @description read config file
+ * @author pipi
+ */
 const fs = require('fs');
 
 module.exports = function (filePath) {
