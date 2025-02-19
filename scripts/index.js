@@ -102,7 +102,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       { encoding: 'utf8' }
     ).trim();
     console.log(`\x1b[34mCurrent commit in ${repoBPath}:\x1b[0m`, `\x1b[32m${currentRepoToCommit}\x1b[0m`);
-    if (repoToFlagCommit !== currentRepoToCommit || currentRepoToCommit.includes(repoToFlagCommit)) {
+    if (!currentRepoToCommit.includes(repoToFlagCommit)) {
       console.log(`\x1b[31mError: The current commit: ${currentRepoToCommit} in ${repoBPath} does not match the flag commit(${repoToFlagCommit}) specified in the config file.\x1b[0m`);
       return;
     }
