@@ -17,7 +17,7 @@ function resolveHomePath(relativePath) {
 }
 
 // Validate if the provided path is a valid Git repository
-const validateRepo = (repoPath, needValdateGit) => {
+const validateRepo = (repoPath) => {
   if (!fs.existsSync(repoPath)) {
     console.log(`\x1b[31mError: The path "${repoPath}" does not exist.\x1b[0m`); // Error in red
     return false;
@@ -25,7 +25,7 @@ const validateRepo = (repoPath, needValdateGit) => {
   const gitDirPath = path.join(repoPath, '.git');
   if (!fs.existsSync(gitDirPath)) {
     // If the .git directory is missing, it may be due to a shallow clone
-    console.log(`\x1b[${needValdateGit ? 31 : 33}mError: The path "${repoPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
+    console.log(`\x1b[31mError: The path "${repoPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
     if (needValdateGit) {
       return false;
     }
@@ -90,10 +90,24 @@ function handleFileRename(repoA, repoB, oldPath, newPath) {
  * @param {string} commitA Start commit reference
  * @param {string} commitB End commit reference
  */
-function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit) {
-  if (!validateRepo(repoAPath, needValdateGit) || !validateRepo(repoBPath, needValdateGit)) {
-    return;
+function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit) {
+  if (needValdateGit) {
+    // Validate if the provided paths are valid Git repositories
+    if (!validateRepo(repoAPath) || !validateRepo(repoBPath)) {
+      return;
+    }
+    // Check if the current commit in repoB matches the commit specified in the config file
+    const currentRepoToCommit = execSync(
+      `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} rev-parse HEAD`,
+      { encoding: 'utf8' }
+    ).trim();
+    console.log(`\x1b[34mCurrent commit in ${repoBPath}:\x1b[0m`, `\x1b[32m${currentRepoToCommit}\x1b[0m`);
+    if (repoToFlagCommit !== currentRepoToCommit) {
+      console.log(`\x1b[31mError: The current commit in ${repoBPath} does not match the commit specified in the config file.\x1b[0m`);
+      return;
+    }
   }
+
   try {
     // Run Git diff to get file changes (including renames)
     const diffOutput = execSync(
@@ -165,6 +179,6 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
 
 // Load configuration from a JSON file
 const config = loadConfig('config.json'); // Example path to config.json
-const { repoFromPath, repoToPath, commitFrom, commitTo, needValdateGit } = config;
+const { mtRepos: [repoFromPath, repoToPath], commitRange: [commitFrom, commitTo], needValdateGit, repoToFlagCommit } = config;
 // Start the synchronization process with the loaded parameters
-syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit);
+syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit, repoToFlagCommit);

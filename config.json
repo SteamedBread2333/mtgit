@@ -1,7 +1,12 @@
 {
-  "repoFromPath": "",
-  "repoToPath": "",
-  "commitFrom": "",
-  "commitTo": "",
-  "needValdateGit": false
+  "mtRepos": [
+    "",
+    ""
+  ],
+  "commitRange": [
+    "",
+    ""
+  ],
+  "needValdateGit": false,
+  "repoToFlagCommit": ""
 }
