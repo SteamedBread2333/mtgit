@@ -102,8 +102,8 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       { encoding: 'utf8' }
     ).trim();
     console.log(`\x1b[34mCurrent commit in ${repoBPath}:\x1b[0m`, `\x1b[32m${currentRepoToCommit}\x1b[0m`);
-    if (repoToFlagCommit !== currentRepoToCommit) {
-      console.log(`\x1b[31mError: The current commit in ${repoBPath} does not match the commit specified in the config file.\x1b[0m`);
+    if (repoToFlagCommit !== currentRepoToCommit || currentRepoToCommit.includes(repoToFlagCommit)) {
+      console.log(`\x1b[31mError: The current commit: ${currentRepoToCommit} in ${repoBPath} does not match the flag commit(${repoToFlagCommit}) specified in the config file.\x1b[0m`);
       return;
     }
   }
@@ -114,11 +114,10 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       `git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --name-status --diff-filter=ARM --find-renames=50% ${commitA} ${commitB}`,
       { encoding: 'utf8' }
     ).trim();
-
     console.log(`\x1b[34mChanges between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffOutput}\x1b[0m`, '\n');
 
     if (!diffOutput) {
-      console.log('No changes to sync.');
+      console.log('\x1b[32mNo changes found between the specified commits.\x1b[0m');
       return;
     }
 
@@ -165,15 +164,15 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
           `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from ${path.basename(repoAPath)}"`,
           { stdio: 'inherit' }
         );
-        console.log('\x1b[32mChanges committed to repoB.\x1b[0m'); // Success message in green
+        console.log('\x1b[32mChanges committed to repoB.\x1b[0m');
       } else {
-        console.log('\x1b[32mChanges not committed.\x1b[0m'); // Info message in green
+        console.log('\x1b[32mChanges not committed.\x1b[0m');
       }
       rl.close();
     });
 
   } catch (error) {
-    console.log(`\x1b[31mError syncing repositories:\n${error}\x1b[0m`); // Error message in red
+    console.log(`\x1b[31mError syncing repositories:\n${error}\x1b[0m`);
   }
 }
 
