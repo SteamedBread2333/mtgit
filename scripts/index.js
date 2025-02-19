@@ -49,7 +49,7 @@ function handleFileChange(repoA, repoB, status, srcPath, destPath) {
   switch (status) {
     case 'A': // Copy new file from repo A to repo B
     case 'M': // Update modified file in repo B
-      console.log(`\x1b[32mCopying ${srcPath} from repoA to repoB\x1b[0m`);
+      console.log(`\x1b[32mCopying ${srcPath} from ${repoA}\x1b[0m`, '\x1b[34m-->>\x1b[0m', `\x1b[32m${repoB}\x1b[0m`);
       fs.mkdirSync(path.dirname(repoBFile), { recursive: true });
       fs.copyFileSync(repoAFile, repoBFile);
       break;
@@ -102,6 +102,8 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       { encoding: 'utf8' }
     ).trim();
 
+    console.log(`\x1b[34mChanges between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffOutput}\x1b[0m`, '\n');
+
     if (!diffOutput) {
       console.log('No changes to sync.');
       return;
@@ -137,7 +139,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
     });
 
     // Ask the user for confirmation before committing changes
-    console.log('\x1b[32mAll changes have been applied to repoB. Do you want to commit these changes? (y/n)\x1b[0m');
+    console.log('\x1b[33mAll changes have been applied to repoB. Do you want to commit these changes? (y/n)\x1b[0m');
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
@@ -147,7 +149,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       if (answer.trim().toLowerCase() === 'y') {
         // Commit changes to repository B
         execSync(
-          `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from repoA"`,
+          `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from ${path.basename(repoAPath)}"`,
           { stdio: 'inherit' }
         );
         console.log('\x1b[32mChanges committed to repoB.\x1b[0m'); // Success message in green
