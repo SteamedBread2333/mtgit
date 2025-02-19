@@ -1,0 +1,24 @@
+{
+  "name": "mt-git",
+  "version": "1.0.0",
+  "description": "Use this tool when a project is maintained in two repositories and the commit capability is limited in one of them.",
+  "main": "scripts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./scripts/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SteamedBread2333/mt-git.git"
+  },
+  "keywords": [
+    "manual",
+    "merge"
+  ],
+  "author": "pipi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SteamedBread2333/mt-git/issues"
+  },
+  "homepage": "https://github.com/SteamedBread2333/mt-git#readme"
+}
