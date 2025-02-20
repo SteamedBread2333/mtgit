@@ -6,32 +6,10 @@
 const { execSync } = require('child_process'); // For executing Git commands
 const fs = require('fs'); // File system operations
 const path = require('path'); // Path manipulation
-const readline = require('readline'); // User input
+const createReadlineInterface = require('./applyCreateRL'); // Readline interface for user input
+const resolveHomePath = require('./applyResolveHomePath'); // Resolve the home directory in the path
 const loadConfig = require('./applyConfig'); // Load configuration from a JSON file
-const os = require('os'); // Operating system information
-
-// Resolve the home directory in the path
-function resolveHomePath(relativePath) {
-  const homeDir = os.homedir();
-  return path.resolve(homeDir, relativePath.replace(/^~\//, ''));
-}
-
-// Validate if the provided path is a valid Git repository
-const validateRepo = (repoPath) => {
-  if (!fs.existsSync(repoPath)) {
-    console.log(`\x1b[31mError: The path "${repoPath}" does not exist.\x1b[0m`); // Error in red
-    return false;
-  }
-  const gitDirPath = path.join(repoPath, '.git');
-  if (!fs.existsSync(gitDirPath)) {
-    // If the .git directory is missing, it may be due to a shallow clone
-    console.log(`\x1b[31mError: The path "${repoPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
-    if (needValdateGit) {
-      return false;
-    }
-  }
-  return true;
-};
+const { validateRepo, validateFlagCommit } = require('./validate'); // Validate if the provided path is a valid Git repository
 
 /**
  * Handles file changes (additions, modifications, deletions).
@@ -94,15 +72,12 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
   if (needValdateGit) {
     // Validate if the provided paths are valid Git repositories
     if (!validateRepo(repoAPath) || !validateRepo(repoBPath)) {
+      // If the .git directory is missing, it may be due to a shallow clone
+      console.log(`\x1b[31mError: The path "${repoBPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
       return;
     }
     // Check if the current commit in repoB matches the commit specified in the config file
-    const currentRepoToCommit = execSync(
-      `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} rev-parse HEAD`,
-      { encoding: 'utf8' }
-    ).trim();
-    console.log(`\x1b[34mCurrent commit in ${repoBPath}:\x1b[0m`, `\x1b[32m${currentRepoToCommit}\x1b[0m`);
-    if (!currentRepoToCommit.includes(repoToFlagCommit)) {
+    if (!validateFlagCommit(repoBPath, repoToFlagCommit)) {
       console.log(`\x1b[31mError: The current commit: ${currentRepoToCommit} in ${repoBPath} does not match the flag commit(${repoToFlagCommit}) specified in the config file.\x1b[0m`);
       return;
     }
@@ -127,50 +102,69 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
       .map(line => line.trim())
       .filter(line => line);
 
+    const ioTasks = []
+
     // Process each file change
     fileStatus.forEach(line => {
       const parts = line.split('\t');
       const status = parts[0].trim(); // File status indicating addition, modification, deletion, or rename
       let srcPath, destPath;
-
+      let run = null;
       switch (status) {
         case 'A': // Added file
         case 'M': // Modified file
         case 'D': // Deleted file
-          srcPath = parts[1];
-          destPath = srcPath;
-          handleFileChange(repoAPath, repoBPath, status, srcPath, destPath);
+          run = (() => {
+            srcPath = parts[1];
+            destPath = srcPath;
+            console.log(`\x1b[32mChange task ready: Status:\x1b[0m \x1b[33m${status}\x1b[0m \x1b[32mTask: ${destPath} -> ${destPath}\x1b[0m`)
+            return () => {
+              handleFileChange(repoAPath, repoBPath, status, srcPath, destPath);
+            }
+          })()
           break;
         case 'R': // Renamed file
-          const renameParts = line.split('\t');
-          const oldPath = renameParts[1];
-          const newPath = renameParts[2];
-          handleFileRename(repoAPath, repoBPath, oldPath, newPath);
+          run = (() => {
+            const renameParts = line.split('\t');
+            const oldPath = renameParts[1];
+            const newPath = renameParts[2];
+            console.log(`\x1b[32mChange task ready: Status: ${status} ${oldPath} -> ${newPath}\x1b[0m`)
+            return () => {
+              handleFileRename(repoAPath, repoBPath, oldPath, newPath);
+            }
+          })
           break;
       }
+      if (run) {
+        ioTasks.push(run)
+      }
     });
 
-    // Ask the user for confirmation before committing changes
-    console.log('\x1b[33mAll changes have been applied to repoB. Do you want to commit these changes? (y/n)\x1b[0m');
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
+    const rl = createReadlineInterface();
 
+    console.log(`\x1b[33mPlease note that the changes will be committed to ${repoBPath}.\x1b[0m`);
+    console.log(`\x1b[33mAll tasks: ${ioTasks.length}\x1b[0m`);
+    console.log('\x1b[33mAll tasks have been ready. Do you want to commit these changes? (y/n)\x1b[0m');
     rl.question('', (answer) => {
       if (answer.trim().toLowerCase() === 'y') {
-        // Commit changes to repository B
-        execSync(
-          `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from ${path.basename(repoAPath)}"`,
-          { stdio: 'inherit' }
-        );
-        console.log('\x1b[32mChanges committed to repoB.\x1b[0m');
-      } else {
-        console.log('\x1b[32mChanges not committed.\x1b[0m');
+        ioTasks.forEach(task => task())
       }
-      rl.close();
+      // Ask the user for confirmation before committing changes
+      console.log('\x1b[33mAll changes have been applied to repoB. Do you want to commit these changes? (y/n)\x1b[0m');
+      rl.question('', (answer) => {
+        if (answer.trim().toLowerCase() === 'y') {
+          // Commit changes to repository B
+          execSync(
+            `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from ${path.basename(repoAPath)}"`,
+            { stdio: 'inherit' }
+          );
+          console.log('\x1b[32mChanges committed to repoB.\x1b[0m');
+        } else {
+          console.log('\x1b[32mChanges not committed.\x1b[0m');
+        }
+        rl.close();
+      });
     });
-
   } catch (error) {
     console.log(`\x1b[31mError syncing repositories:\n${error}\x1b[0m`);
   }
