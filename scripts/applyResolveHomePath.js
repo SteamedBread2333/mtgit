@@ -1,3 +1,8 @@
+/**
+ * @file applyResolveHomePath.js
+ * @description Resolve the home directory in the path
+ * @author pipi
+ */
 const os = require('os'); // Operating system information
 const path = require('path'); // Path module
 

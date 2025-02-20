@@ -62,6 +62,24 @@ function handleFileRename(repoA, repoB, oldPath, newPath) {
 }
 
 /**
+ * Checks if both repositories exist.
+ * @param {string} repoAPath 
+ * @param {string} repoBPath 
+ * @returns {boolean}
+ */
+function reposExists(repoAPath, repoBPath) {
+  if (!fs.existsSync(repoAPath)) {
+    console.log(`\x1b[31mError: The path "${repoAPath}" does not exist.\x1b[0m`);
+    return false;
+  }
+  if (!fs.existsSync(repoBPath)) {
+    console.log(`\x1b[31mError: The path "${repoBPath}" does not exist.\x1b[0m`);
+    return false;
+  }
+  return true;
+}
+
+/**
  * Synchronizes changes between two Git repositories.
  * @param {string} repoAPath Path to repository A
  * @param {string} repoBPath Path to repository B
@@ -69,6 +87,9 @@ function handleFileRename(repoA, repoB, oldPath, newPath) {
  * @param {string} commitB End commit reference
  */
 function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit) {
+  if (reposExists(repoAPath, repoBPath) === false) {
+    return;
+  }
   if (needValdateGit) {
     // Validate if the provided paths are valid Git repositories
     if (!validateRepo(repoAPath) || !validateRepo(repoBPath)) {

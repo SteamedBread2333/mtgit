@@ -1,3 +1,8 @@
+/**
+ * @file applyCreateRL.js
+ * @description Creates a readline interface for user input.
+ * @author pipi
+ */
 const readline = require('readline');
 
 /**

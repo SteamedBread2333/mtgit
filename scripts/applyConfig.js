@@ -5,6 +5,11 @@
  */
 const fs = require('fs');
 
+/**
+ * Load configuration from a JSON file.
+ * @param {*} filePath 
+ * @returns {*} config
+ */
 module.exports = function (filePath) {
   try {
     const data = fs.readFileSync(filePath, 'utf8');
