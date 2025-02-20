@@ -5,6 +5,7 @@
  */
 const fs = require('fs'); // File system operations
 const path = require('path'); // Path module
+const { execSync } = require('child_process'); // For executing Git commands
 
 /**
  * Validate if the provided path is a valid Git repository
