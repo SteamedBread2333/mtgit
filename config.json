@@ -1,16 +1,13 @@
 {
   "mtRepos": [
-    "~/Desktop/zelda-mp-marriott",
-    "~/Documents/WebProjects/zelda-mp-marriott-2.0"
+    "",
+    ""
   ],
   "commitRange": [
-    "dc22e6651a207631841e20a8bedb606a356abc62",
-    "5b6667c7e6525992b76a32941a943bba4fdc154e"
+    "",
+    ""
   ],
   "needValdateGit": false,
-  "repoToFlagCommit": "5ccc847a133a51898e040fbaae86b143f614febe",
-  "publicPaths": [
-    "zelda-mp-marriott",
-    ""
-  ]
+  "repoToFlagCommit": "",
+  "publicPaths": ["", ""]
 }
