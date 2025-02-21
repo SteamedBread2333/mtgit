@@ -1,6 +1,6 @@
 <h1 align="center">
   <br/>
-    <img width="150" alt="mt-git-logo" src="https://github.com/user-attachments/assets/73887351-1a03-4584-9158-1d97659e2765" />
+    <img width="268" alt="mt-git-logo" src="https://github.com/user-attachments/assets/fa9c114f-5c7f-4d66-9449-494e1fedda60" />
   <br/>
 </h1>
 
