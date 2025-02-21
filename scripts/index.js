@@ -28,7 +28,11 @@ function handleFileChange(repoA, repoB, status, srcPath, destPath) {
     case 'M': // Update modified file in repo B
       console.log(`\x1b[32mCopying ${srcPath} from ${srcPath}\x1b[0m`, '\x1b[34m-->>\x1b[0m', `\x1b[32m${destPath}\x1b[0m`);
       fs.mkdirSync(path.dirname(repoBFile), { recursive: true });
+      const sourceStats = fs.statSync(path.dirname(repoBFile));
+      const { mode, atime, mtime } = sourceStats
       fs.copyFileSync(repoAFile, repoBFile);
+      fs.chmodSync(repoBFile, mode);
+      fs.utimesSync(repoBFile, atime, mtime);
       break;
     case 'D': // Delete file in repo B
       console.log(`\x1b[32mDeleting ${srcPath} from ${repoB}\x1b[0m`);
@@ -52,8 +56,11 @@ function handleFileRename(repoA, repoB, oldPath, newPath) {
 
   console.log(`\x1b[32mRenaming ${oldPath} to ${newPath}\x1b[0m`);
   fs.mkdirSync(path.dirname(repoBNewFile), { recursive: true });
+  const sourceStats = fs.statSync(path.dirname(repoAOldFile));
+  const { mode, atime, mtime } = sourceStats
   fs.copyFileSync(repoAOldFile, repoBNewFile);
-
+  fs.chmodSync(repoBNewFile, mode);
+  fs.utimesSync(repoBNewFile, atime, mtime);
   // Remove the old file if it exists in repo B
   const repoBOldFile = path.join(repoB, oldPath);
   if (fs.existsSync(repoBOldFile)) {
