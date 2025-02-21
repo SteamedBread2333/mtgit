@@ -139,7 +139,6 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
         case 'M': // Modified file
         case 'D': // Deleted file
           run = (() => {
-            console.log(parts)
             srcPath = parts[1];
             destPath = srcPath.replace(repoFromPublicPath, repoToPublicPath);
             console.log(`\x1b[32mChange task ready: Status:\x1b[0m \x1b[33m${status}\x1b[0m \x1b[32mTask: ${srcPath} -> ${destPath}\x1b[0m`)
