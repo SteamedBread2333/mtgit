@@ -26,12 +26,12 @@ function handleFileChange(repoA, repoB, status, srcPath, destPath) {
   switch (status) {
     case 'A': // Copy new file from repo A to repo B
     case 'M': // Update modified file in repo B
-      console.log(`\x1b[32mCopying ${srcPath} from ${repoA}\x1b[0m`, '\x1b[34m-->>\x1b[0m', `\x1b[32m${repoB}\x1b[0m`);
+      console.log(`\x1b[32mCopying ${srcPath} from ${srcPath}\x1b[0m`, '\x1b[34m-->>\x1b[0m', `\x1b[32m${destPath}\x1b[0m`);
       fs.mkdirSync(path.dirname(repoBFile), { recursive: true });
       fs.copyFileSync(repoAFile, repoBFile);
       break;
     case 'D': // Delete file in repo B
-      console.log(`\x1b[32mDeleting ${srcPath} from repoB\x1b[0m`);
+      console.log(`\x1b[32mDeleting ${srcPath} from ${repoB}\x1b[0m`);
       if (fs.existsSync(repoBFile)) {
         fs.unlinkSync(repoBFile);
       }
@@ -87,8 +87,6 @@ function reposExists(repoAPath, repoBPath) {
  * @param {string} commitB End commit reference
  */
 function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath) {
-  const repoFromPath = path.join(repoAPath, repoFromPublicPath);
-  const repoToPath = path.join(repoBPath, repoToPublicPath);
   if (reposExists(repoAPath, repoBPath) === false) {
     return;
   }
@@ -141,11 +139,12 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
         case 'M': // Modified file
         case 'D': // Deleted file
           run = (() => {
+            console.log(parts)
             srcPath = parts[1];
-            destPath = srcPath;
-            console.log(`\x1b[32mChange task ready: Status:\x1b[0m \x1b[33m${status}\x1b[0m \x1b[32mTask: ${destPath} -> ${destPath}\x1b[0m`)
+            destPath = srcPath.replace(repoFromPublicPath, repoToPublicPath);
+            console.log(`\x1b[32mChange task ready: Status:\x1b[0m \x1b[33m${status}\x1b[0m \x1b[32mTask: ${srcPath} -> ${destPath}\x1b[0m`)
             return () => {
-              handleFileChange(repoFromPath, repoToPath, status, srcPath, destPath);
+              handleFileChange(repoAPath, repoBPath, status, srcPath, destPath);
             }
           })()
           break;
@@ -156,7 +155,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
             const newPath = renameParts[2];
             console.log(`\x1b[32mChange task ready: Status: ${status} ${oldPath} -> ${newPath}\x1b[0m`)
             return () => {
-              handleFileRename(repoFromPath, repoToPath, oldPath, newPath);
+              handleFileRename(repoAPath, repoBPath, oldPath, newPath);
             }
           })
           break;
