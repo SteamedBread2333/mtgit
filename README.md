@@ -1,5 +1,5 @@
 <div style="border-radius: 6px;" align="center">
-  <img width="268" alt="logo" src="https://github.com/user-attachments/assets/968d552d-c686-47c1-8c09-14d57e7ec6ea" />
+  <img width="150" alt="logo" src="https://github.com/user-attachments/assets/968d552d-c686-47c1-8c09-14d57e7ec6ea" />
 </div>
 
 # mt-git
