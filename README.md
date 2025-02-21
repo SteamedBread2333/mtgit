@@ -5,7 +5,7 @@
 </h1>
 
 # mt-git
-🫵🏻 When a project is maintained in two repositories and one of the repositories restricts the current user's ability to use Git, welcome use this tool.
+🤜🏼 When a project is maintained in two repositories and one of the repositories restricts the current user's ability to use Git, welcome use this tool.
 
 ## Detailed Explanation
 In some collaborative development scenarios, a project might be managed across two separate Git repositories. This could be due to various reasons, such as splitting the codebase for different environments (development vs. production) or maintaining a separate repository for sensitive data or configurations. However, in such setups, it is common for one of the repositories to have restricted access, especially for certain users. This restriction might limit the user's ability to perform Git operations like commits, pushes, or even cloning. In these cases, using a specialized tool can help bridge the gap between the two repositories, allowing users to work around the limitations and maintain a seamless workflow. The tool can facilitate tasks like syncing changes, managing branches, or even automating the transfer of commits between the restricted and unrestricted repositories.
