@@ -8,5 +8,6 @@
     ""
   ],
   "needValdateGit": false,
-  "repoToFlagCommit": ""
+  "repoToFlagCommit": "",
+  "publicPaths": ["", ""]
 }

@@ -3,7 +3,7 @@
  * @description Synchronizes changes between two Git repositories.
  * @author pipi
  */
-const { execSync } = require('child_process'); // For executing Git commands
+const { execSync, exec } = require('child_process'); // For executing Git commands
 const fs = require('fs'); // File system operations
 const path = require('path'); // Path manipulation
 const createReadlineInterface = require('./applyCreateRL'); // Readline interface for user input
@@ -86,7 +86,9 @@ function reposExists(repoAPath, repoBPath) {
  * @param {string} commitA Start commit reference
  * @param {string} commitB End commit reference
  */
-function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit) {
+function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath) {
+  const repoFromPath = path.join(repoAPath, repoFromPublicPath);
+  const repoToPath = path.join(repoBPath, repoToPublicPath);
   if (reposExists(repoAPath, repoBPath) === false) {
     return;
   }
@@ -105,11 +107,14 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
   }
 
   try {
+    // Run Git diff to get file details changes between the specified commits
+    // const diffDetailsOutput = execSync(`git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --color --color-words --unified=99999 ${commitA} ${commitB}`, { encoding: 'utf8' }).toString().trim();
+    // console.log(`\x1b[34mDiff details between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffDetailsOutput}\x1b[0m`, '\n');
     // Run Git diff to get file changes (including renames)
     const diffOutput = execSync(
       `git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --name-status --diff-filter=ARM --find-renames=50% ${commitA} ${commitB}`,
       { encoding: 'utf8' }
-    ).trim();
+    ).toString().trim();
     console.log(`\x1b[34mChanges between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffOutput}\x1b[0m`, '\n');
 
     if (!diffOutput) {
@@ -140,7 +145,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
             destPath = srcPath;
             console.log(`\x1b[32mChange task ready: Status:\x1b[0m \x1b[33m${status}\x1b[0m \x1b[32mTask: ${destPath} -> ${destPath}\x1b[0m`)
             return () => {
-              handleFileChange(repoAPath, repoBPath, status, srcPath, destPath);
+              handleFileChange(repoFromPath, repoToPath, status, srcPath, destPath);
             }
           })()
           break;
@@ -151,7 +156,7 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
             const newPath = renameParts[2];
             console.log(`\x1b[32mChange task ready: Status: ${status} ${oldPath} -> ${newPath}\x1b[0m`)
             return () => {
-              handleFileRename(repoAPath, repoBPath, oldPath, newPath);
+              handleFileRename(repoFromPath, repoToPath, oldPath, newPath);
             }
           })
           break;
@@ -193,6 +198,6 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
 
 // Load configuration from a JSON file
 const config = loadConfig('config.json'); // Example path to config.json
-const { mtRepos: [repoFromPath, repoToPath], commitRange: [commitFrom, commitTo], needValdateGit, repoToFlagCommit } = config;
+const { mtRepos: [repoFromPath, repoToPath], commitRange: [commitFrom, commitTo], needValdateGit, repoToFlagCommit, publicPaths: [repoFromPublicPath, repoToPublicPath] } = config;
 // Start the synchronization process with the loaded parameters
-syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit, repoToFlagCommit);
+syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath);
