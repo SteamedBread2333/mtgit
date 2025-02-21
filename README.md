@@ -1,6 +1,8 @@
-<div style="border-radius: 6px;" align="center">
-  <img width="150" alt="logo" src="https://github.com/user-attachments/assets/968d552d-c686-47c1-8c09-14d57e7ec6ea" />
-</div>
+<h1 align="center">
+  <br/>
+    <img width="150" alt="logo" src="https://github.com/user-attachments/assets/968d552d-c686-47c1-8c09-14d57e7ec6ea" />
+  <br/>
+</h1>
 
 # mt-git
 🫵🏻 When a project is maintained in two repositories and one of the repositories restricts the current user's ability to use Git, welcome use this tool.
