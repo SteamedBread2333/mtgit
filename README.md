@@ -4,7 +4,7 @@
   <br/>
 </h1>
 
-# mt-git
+# mtgit
 🤜🏼 When a project is maintained in two repositories and one of the repositories restricts the current user's ability to use Git, welcome use this tool.
 
 ## Detailed Explanation
