@@ -15,6 +15,7 @@ const { execSync } = require('child_process'); // For executing Git commands
 function validateRepo(repoPath) {
   const gitDirPath = path.join(repoPath, '.git');
   if (!fs.existsSync(gitDirPath)) {
+    console.log(`\x1b[31mError: The path "${repoPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
     return false;
   }
   return true;
@@ -33,6 +34,7 @@ function validateFlagCommit(repoPath, flagCommit) {
   ).trim();
   console.log(`\x1b[34mCurrent commit in ${repoPath}:\x1b[0m`, `\x1b[32m${currentRepoToCommit}\x1b[0m`);
   if (!currentRepoToCommit.includes(flagCommit)) {
+    console.log(`\x1b[31mError: The current commit: ${currentRepoToCommit} in ${repoPath} does not match the flag commit(${flagCommit}) specified in the config file.\x1b[0m`);
     return false
   }
   return true;

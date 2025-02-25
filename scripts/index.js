@@ -94,33 +94,34 @@ function reposExists(repoAPath, repoBPath) {
  * @param {string} commitB End commit reference
  */
 function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath) {
+  // Check if both repositories exist
   if (reposExists(repoAPath, repoBPath) === false) {
     return;
   }
   if (needValdateGit) {
     // Validate if the provided paths are valid Git repositories
     if (!validateRepo(repoAPath) || !validateRepo(repoBPath)) {
-      // If the .git directory is missing, it may be due to a shallow clone
-      console.log(`\x1b[31mError: The path "${repoBPath}" does not seem to be a valid Git repository (missing .git directory).\x1b[0m`);
       return;
     }
     // Check if the current commit in repoB matches the commit specified in the config file
     if (!validateFlagCommit(repoBPath, repoToFlagCommit)) {
-      console.log(`\x1b[31mError: The current commit: ${currentRepoToCommit} in ${repoBPath} does not match the flag commit(${repoToFlagCommit}) specified in the config file.\x1b[0m`);
       return;
     }
   }
 
   try {
     // Run Git diff to get file details changes between the specified commits
-    // const diffDetailsOutput = execSync(`git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --color --color-words --unified=99999 ${commitA} ${commitB}`, { encoding: 'utf8' }).toString().trim();
-    // console.log(`\x1b[34mDiff details between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffDetailsOutput}\x1b[0m`, '\n');
+    // console.log(`\x1b[34mDiff details between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`);
+    // execSync(`git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --color --color-words --unified=99999 ${commitA} ${commitB}`, { stdio: 'inherit' });
     // Run Git diff to get file changes (including renames)
     const diffOutput = execSync(
       `git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} diff --name-status --diff-filter=ARM --find-renames=50% ${commitA} ${commitB}`,
       { encoding: 'utf8' }
-    ).toString().trim();
-    console.log(`\x1b[34mChanges between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`, '\n', `\x1b[34m${diffOutput}\x1b[0m`, '\n');
+    );
+    console.log(`\x1b[34mChanges between\x1b[0m`, `\x1b[32m${commitA}\x1b[0m`, `\x1b[34mand\x1b[0m`, `\x1b[32m${commitB}\x1b[0m`);
+    console.log(`
+\x1b[34m${diffOutput}\x1b[0m
+      `)
 
     if (!diffOutput) {
       console.log('\x1b[32mNo changes found between the specified commits.\x1b[0m');
@@ -181,12 +182,23 @@ function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit
         ioTasks.forEach(task => task())
       }
       // Ask the user for confirmation before committing changes
-      console.log('\x1b[33mAll changes have been applied to repoB. Do you want to commit these changes? (y/n)\x1b[0m');
+      console.log('\x1b[33mAll changes have been applied to repoB.\x1b[0m');
+      // Generate merge template
+      const mergeContent = execSync(
+        `git --git-dir=${repoAPath}/.git --work-tree=${repoAPath} log --pretty=format:"%s <%H>" ${commitA}..${commitB}`,
+        { encoding: 'utf8' }
+      );
+      const mergeTemp = `
+Merged commits: ${commitA}..${commitB}
+${mergeContent.trim()}
+      `;
+      console.log(`\x1b[33mCommit Message Generated:\x1b[0m \n \x1b[32m${mergeTemp}\x1b[0m`);
+      console.log('\x1b[33mDo you want to commit these changes? (y/n)\x1b[0m');
       rl.question('', (answer) => {
         if (answer.trim().toLowerCase() === 'y') {
           // Commit changes to repository B
           execSync(
-            `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "Synced changes from ${path.basename(repoAPath)}"`,
+            `git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} add . && git --git-dir=${repoBPath}/.git --work-tree=${repoBPath} commit -m "${mergeTemp}"`,
             { stdio: 'inherit' }
           );
           console.log('\x1b[32mChanges committed to repoB.\x1b[0m');
