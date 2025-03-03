@@ -18,6 +18,23 @@ Nodejs is required and Download the project.
 - You have to know what's going on.
 - You have to know what you're doing with this tool.
 
+## Configuration Parameters Documentation
+```json
+{
+  "mtRepos": [
+    "", // Local path of the source repository (repo from)
+    "" // Local path of the target repository (repo to)
+  ],
+  "commitRange": [
+    "", // Starting commit in the source repository (repo from) to be merged
+    "" // Ending commit in the source repository (repo from) to be merged
+  ],
+  "needValdateGit": false, // Whether to validate the Git status
+  "repoToFlagCommit": "", // Commit in the target repository (repo to) to be flagged, usually corresponding to the starting commit of commitRange
+  "publicPaths": ["", ""] // File paths to be synchronized between the source and target repositories, used to resolve inconsistencies in relative paths between the two repositories
+}
+```
+
 ## Usage
 Run the following command:
 ```bash
