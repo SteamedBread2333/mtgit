@@ -3,7 +3,7 @@
  * @description Synchronizes changes between two Git repositories.
  * @author pipi
  */
-const { execSync, exec } = require('child_process'); // For executing Git commands
+const { execSync } = require('child_process'); // For executing Git commands
 const fs = require('fs'); // File system operations
 const path = require('path'); // Path manipulation
 const createReadlineInterface = require('./applyCreateRL'); // Readline interface for user input
