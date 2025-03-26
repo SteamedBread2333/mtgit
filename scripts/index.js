@@ -93,12 +93,12 @@ function reposExists(repoAPath, repoBPath) {
  * @param {string} commitA Start commit reference
  * @param {string} commitB End commit reference
  */
-function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath) {
+function syncRepositories(repoAPath, repoBPath, commitA, commitB, needValidateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath) {
   // Check if both repositories exist
   if (reposExists(repoAPath, repoBPath) === false) {
     return;
   }
-  if (needValdateGit) {
+  if (needValidateGit) {
     // Validate if the provided paths are valid Git repositories
     if (!validateRepo(repoAPath) || !validateRepo(repoBPath)) {
       return;
@@ -215,6 +215,6 @@ ${mergeContent.trim()}
 
 // Load configuration from a JSON file
 const config = loadConfig('config.json'); // Example path to config.json
-const { mtRepos: [repoFromPath, repoToPath], commitRange: [commitFrom, commitTo], needValdateGit, repoToFlagCommit, publicPaths: [repoFromPublicPath, repoToPublicPath] } = config;
+const { mtRepos: [repoFromPath, repoToPath], commitRange: [commitFrom, commitTo], needValidateGit, repoToFlagCommit, publicPaths: [repoFromPublicPath, repoToPublicPath] } = config;
 // Start the synchronization process with the loaded parameters
-syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValdateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath);
+syncRepositories(resolveHomePath(repoFromPath), resolveHomePath(repoToPath), commitFrom, commitTo, needValidateGit, repoToFlagCommit, repoFromPublicPath, repoToPublicPath);

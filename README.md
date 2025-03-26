@@ -29,7 +29,7 @@ Nodejs is required and Download the project.
     "", // Starting commit in the source repository (repo from) to be merged
     "" // Ending commit in the source repository (repo from) to be merged
   ],
-  "needValdateGit": false, // Whether to validate the Git status
+  "needValidateGit": false, // Whether to validate the Git status
   "repoToFlagCommit": "", // Commit in the target repository (repo to) to be flagged, usually corresponding to the starting commit of commitRange
   "publicPaths": ["", ""] // File paths to be synchronized between the source and target repositories, used to resolve inconsistencies in relative paths between the two repositories
 }

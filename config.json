@@ -7,7 +7,7 @@
     "",
     ""
   ],
-  "needValdateGit": false,
+  "needValidateGit": false,
   "repoToFlagCommit": "",
   "publicPaths": ["", ""]
 }
