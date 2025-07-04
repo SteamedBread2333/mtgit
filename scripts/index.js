@@ -27,13 +27,26 @@ function handleFileChange(repoA, repoB, status, srcPath, destPath) {
     case 'A': // Copy new file from repo A to repo B
     case 'M': // Update modified file in repo B
       console.log(`\x1b[32mCopying ${srcPath} from ${srcPath}\x1b[0m`, '\x1b[34m-->>\x1b[0m', `\x1b[32m${destPath}\x1b[0m`);
+      
+      // Ensure destination directory exists
       fs.mkdirSync(path.dirname(repoBFile), { recursive: true });
-      const sourceStats = fs.statSync(path.dirname(repoBFile));
-      const { mode, atime, mtime } = sourceStats
-      fs.copyFileSync(repoAFile, repoBFile);
+      
+      // Get source file stats for preserving metadata
+      const sourceStats = fs.statSync(repoAFile);
+      const { mode, atime, mtime } = sourceStats;
+      
+      // Read source file content and convert CRLF to LF
+      let content = fs.readFileSync(repoAFile, 'utf8');
+      // content = content.replace(/\r\n/g, '\n'); // Convert CRLF to LF
+      
+      // Write content to destination file
+      fs.writeFileSync(repoBFile, content, 'utf8');
+      
+      // Preserve original file metadata
       fs.chmodSync(repoBFile, mode);
       fs.utimesSync(repoBFile, atime, mtime);
       break;
+      
     case 'D': // Delete file in repo B
       console.log(`\x1b[32mDeleting ${srcPath} from ${repoB}\x1b[0m`);
       if (fs.existsSync(repoBFile)) {
