@@ -1,0 +1,183 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Manual Merge Process - Pixel Style" id="manual-merge-process-pixel">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Background -->
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0a0a0a;strokeColor=#1a1a1a;opacity=100;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1400" height="800" as="geometry" />
+        </mxCell>
+        
+        <!-- Title -->
+        <mxCell id="title" value="&gt;&gt; mtgit MANUAL MERGE PROCESS &lt;&lt;" style="text;html=1;strokeColor=#00cc33;fillColor=#0a0a0a;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontStyle=1;fontFamily=Courier New;fontColor=#00ff41;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Source Repository -->
+        <mxCell id="repo-from" value="SOURCE REPO&#xa;[Repo From]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0066ff;strokeColor=#00aaff;fontSize=14;fontStyle=1;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="220" height="90" as="geometry" />
+        </mxCell>
+        
+        <!-- Target Repository -->
+        <mxCell id="repo-to" value="TARGET REPO&#xa;[Repo To]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#00ff41;strokeColor=#00cc33;fontSize=14;fontStyle=1;fontFamily=Courier New;fontColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="120" width="220" height="90" as="geometry" />
+        </mxCell>
+        
+        <!-- Config File -->
+        <mxCell id="config" value="[config.json]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffaa00;strokeColor=#ffcc00;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="590" y="80" width="220" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 1: Load Config -->
+        <mxCell id="step1" value="[1] LOAD CONFIG&#xa;&gt;&gt; Reading config.json" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="590" y="170" width="220" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 2: Validate -->
+        <mxCell id="step2" value="[2] VALIDATE REPOS&#xa;(if needValidateGit=true)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="590" y="250" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 3: Get Diff -->
+        <mxCell id="step3" value="[3] GET FILE CHANGES&#xa;git diff commitA..commitB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- File Changes Types -->
+        <mxCell id="changes" value="FILE CHANGES:&#xa;[+] Added (A)&#xa;[*] Modified (M)&#xa;[-] Deleted (D)&#xa;[&gt;] Renamed (R)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff0066;strokeColor=#ff3399;fontSize=11;fontFamily=Courier New;fontColor=#ffffff;align=left;verticalAlign=top;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="390" width="220" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 4: Prepare Tasks -->
+        <mxCell id="step4" value="[4] PREPARE SYNC TASKS&#xa;(Apply publicPaths mapping)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="590" y="350" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 5: User Confirmation -->
+        <mxCell id="step5" value="[5] USER CONFIRMATION&#xa;Apply changes? [Y/N]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffaa00;strokeColor=#ffcc00;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="590" y="450" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 6: Apply Changes -->
+        <mxCell id="step6" value="[6] APPLY CHANGES&#xa;&gt;&gt; To Target Repo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="300" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 7: Generate Commit Message -->
+        <mxCell id="step7" value="[7] GEN COMMIT MSG&#xa;(from commit logs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="390" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 8: Commit -->
+        <mxCell id="step8" value="[8] USER CONFIRMATION&#xa;Commit? [Y/N]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffaa00;strokeColor=#ffcc00;fontSize=12;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="480" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Step 9: Complete -->
+        <mxCell id="step9" value="[9] COMMIT SUCCESS!&#xa;&gt;&gt; Changes Committed &lt;&lt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#00ff41;strokeColor=#00cc33;fontSize=13;fontStyle=1;fontFamily=Courier New;fontColor=#000000;strokeWidth=4;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="570" width="220" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Arrows -->
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="config" target="step1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="200" as="sourcePoint" />
+            <mxPoint x="630" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="step1" target="step2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="250" as="sourcePoint" />
+            <mxPoint x="630" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="repo-from" target="step3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="250" as="sourcePoint" />
+            <mxPoint x="250" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="step3" target="changes">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="410" as="sourcePoint" />
+            <mxPoint x="230" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow5" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="changes" target="step4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="450" as="sourcePoint" />
+            <mxPoint x="350" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="step4" target="step5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="460" as="sourcePoint" />
+            <mxPoint x="630" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow7" value="[YES]" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;fontFamily=Courier New;fontColor=#00ff41;fontSize=12;fontStyle=1;" edge="1" parent="1" source="step5" target="step6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="480" as="sourcePoint" />
+            <mxPoint x="860" y="430" as="targetPoint" />
+            <mxPoint x="950" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="step6" target="step7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1210" y="400" as="sourcePoint" />
+            <mxPoint x="1260" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;" edge="1" parent="1" source="step7" target="step8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1210" y="480" as="sourcePoint" />
+            <mxPoint x="1260" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow10" value="[YES]" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00ff41;strokeWidth=4;fontFamily=Courier New;fontColor=#00ff41;fontSize=12;fontStyle=1;" edge="1" parent="1" source="step8" target="step9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1210" y="570" as="sourcePoint" />
+            <mxPoint x="1260" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a1a1a;strokeColor=#00ff41;strokeWidth=2;opacity=90;" vertex="1" parent="1">
+          <mxGeometry x="80" y="650" width="600" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-title" value="[LEGEND]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontFamily=Courier New;fontColor=#00ff41;" vertex="1" parent="1">
+          <mxGeometry x="80" y="655" width="600" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend1" value="CONFIG" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffaa00;strokeColor=#ffcc00;fontSize=10;fontFamily=Courier New;fontColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="690" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend2" value="PROCESS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#aa00ff;strokeColor=#cc33ff;fontSize=10;fontFamily=Courier New;fontColor=#ffffff;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="240" y="690" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend3" value="USER ACTION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffaa00;strokeColor=#ffcc00;fontSize=10;fontFamily=Courier New;fontColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="380" y="690" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend4" value="SUCCESS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#00ff41;strokeColor=#00cc33;fontSize=10;fontFamily=Courier New;fontColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="520" y="690" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

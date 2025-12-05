@@ -14,7 +14,7 @@ In some collaborative development scenarios, a project may be split across two G
 Nodejs is required and Download the project.
 
 ## Instructions for use
-![manual_merge_process drawio](https://github.com/user-attachments/assets/b15fc392-2834-4a84-98ca-d78e6563fed9)
+![manual_merge_process](manual_merge_process.svg)
 - You have to know what's going on.
 - You have to know what you're doing with this tool.
 
